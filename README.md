@@ -18,11 +18,11 @@ Aplikasi ini mendukung dua role utama: **Admin** dan **User**, serta menyediakan
 
 ## 🔑 Role & Konstanta
 Aplikasi ini menggunakan konstanta role untuk membedakan akses:
-
+`java
 public class RoleConstant {
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
-}
+}`
 
 src/main/java/com/guitartune/project_raksa/
  ├── configurations/   # Spring Security, Auth config
