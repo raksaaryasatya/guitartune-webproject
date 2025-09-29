@@ -1,6 +1,6 @@
-# 🛍️ Project Raksa
+# 🛍️ Project Guitar Tune
 
-**Project Raksa** adalah aplikasi e-commerce berbasis **Spring Boot** dengan sistem role-based access menggunakan **Spring Security**.  
+**Project Guitar Tune** adalah aplikasi e-commerce berbasis **Spring Boot** dengan sistem role-based access menggunakan **Spring Security**.  
 Aplikasi ini mendukung dua role utama: **Admin** dan **User**, serta menyediakan fitur marketplace sederhana mulai dari registrasi akun, manajemen toko, produk, transaksi, hingga dashboard admin.
 
 ---
