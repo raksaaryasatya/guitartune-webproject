@@ -22,8 +22,7 @@ Aplikasi ini menggunakan konstanta role untuk membedakan akses:
 public class RoleConstant {
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
-}`
-
+}
 src/main/java/com/guitartune/project_raksa/
  ├── configurations/   # Spring Security, Auth config
  ├── constant/         # Konstanta role & konfigurasi global
@@ -32,7 +31,7 @@ src/main/java/com/guitartune/project_raksa/
  ├── init/             # Inisialisasi data awal (misalnya default admin/user)
  ├── models/           # Entity utama (User, Store, Product, Transaction, Category, Role)
  ├── repositorys/      # Spring Data JPA Repository
- └── services/         # Business logic (UserService, StoreService, ProductService, dll.)
+ └── services/         # Business logic (UserService, StoreService, ProductService, dll.)`
 
  ## ✨ Fitur Utama
 
