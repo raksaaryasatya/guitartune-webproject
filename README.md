@@ -35,102 +35,71 @@ src/main/java/com/guitartune/project_raksa/
  ├── repositorys/      # Spring Data JPA Repository
  └── services/         # Business logic (UserService, StoreService, ProductService, dll.)
 
- ✨ Fitur Utama
-👤 User
+ ## ✨ Fitur Utama
 
-Register & Login
+### 👤 User
+- Register & Login
+- Update profile
+- Top-up saldo
+- Lihat & hapus riwayat transaksi
+- Membeli produk dari store
 
-Update profile
+### 🏪 Store
+- Registrasi toko
+- Upload foto toko
+- CRUD produk (tambah, edit, hapus)
+- Melihat produk di toko
+- Withdraw saldo hasil penjualan
 
-Top-up saldo
+### 📦 Produk
+- CRUD produk dengan upload gambar (Base64)
+- Filter produk berdasarkan nama, kategori, dan rentang harga
+- Sorting produk berdasarkan harga (ASC/DESC)
 
-Lihat & hapus riwayat transaksi
+### 💳 Transaksi
+- Membeli produk dengan validasi saldo & stok
+- Melihat history transaksi
+- Filter transaksi berdasarkan waktu (1 menit, 5 menit, 10 menit terakhir)
+- Hapus transaksi dari riwayat
 
-Membeli produk dari store
+### ⚙️ Admin
+- Dashboard admin
+- Manajemen pengguna (lihat, cari, sort, hapus user)
+- Manajemen produk & kategori
+- Monitoring seluruh transaksi
 
-🏪 Store
+---
 
-Registrasi toko
+## ⚙️ Cara Menjalankan
 
-Upload foto toko
-
-CRUD produk (tambah, edit, hapus)
-
-Melihat produk di toko
-
-Withdraw saldo hasil penjualan
-
-📦 Produk
-
-CRUD produk dengan upload gambar (Base64)
-
-Filter produk berdasarkan nama, kategori, dan rentang harga
-
-Sorting produk berdasarkan harga (ASC/DESC)
-
-💳 Transaksi
-
-Membeli produk dengan validasi saldo & stok
-
-Melihat history transaksi
-
-Filter transaksi berdasarkan waktu (1 menit, 5 menit, 10 menit terakhir)
-
-Hapus transaksi dari riwayat
-
-⚙️ Admin
-
-Dashboard admin
-
-Manajemen pengguna (lihat, cari, sort, hapus user)
-
-Manajemen produk & kategori
-
-Monitoring seluruh transaksi
-
-⚙️ Cara Menjalankan
-
-Clone repository:
-
-git clone https://github.com/username/project-raksa.git
-cd project-raksa
-
-
+1. Clone repository:
+   ```bash
+   git clone https://github.com/username/project-raksa.git
+   cd project-raksa
+2. Clone repository:
 Buat database baru (MySQL/PostgreSQL).
-
-Sesuaikan konfigurasi DB di application.properties.
-
-Jalankan aplikasi:
-
+3. Sesuaikan konfigurasi DB di application.properties.
+4. Jalankan aplikasi:
 mvn spring-boot:run
+5. Akses di browser:
+- User: http://localhost:8080/home
+- Admin: http://localhost:8080/admin/dashboard
 
+## 👥 Role Default
 
-Akses di browser:
+- **Admin**
+  - Username: `admin`
+  - Password: `admin123`
 
-User: http://localhost:8080/home
+- **User**
+  - Registrasi manual melalui endpoint `/register`
 
-Admin: http://localhost:8080/admin/dashboard
+---
 
-👥 Role Default
+## 📌 Catatan
 
-Admin
+- Folder **DTO** digunakan sebagai *Data Transfer Object* agar komunikasi data antara controller dan service lebih efisien & aman.  
+- Folder **init** berfungsi untuk inisialisasi data default saat aplikasi pertama kali dijalankan (contoh: membuat akun admin default).  
+- Konstanta role didefinisikan di **RoleConstant** untuk menjaga konsistensi penggunaan role.  
 
-Username: admin
-
-Password: admin123
-
-User
-
-Registrasi manual melalui endpoint /register
-
-📌 Catatan
-
-Folder DTO digunakan sebagai Data Transfer Object agar komunikasi data antara controller dan service lebih efisien & aman.
-
-Folder init berfungsi untuk inisialisasi data default saat aplikasi pertama kali dijalankan (contoh: membuat akun admin default).
-
-Konstanta role didefinisikan di RoleConstant untuk menjaga konsistensi penggunaan role.
-
-👨‍💻 Author
-
-Project ini dibuat sebagai latihan membangun aplikasi marketplace sederhana menggunakan Spring Boot.
+---
