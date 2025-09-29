@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Guitar Tune - User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        font-family: "Inter", sans-serif;
+        color: white;
+      }
+      .custom-gradient {
+        background: linear-gradient(to right, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .nav-hover:hover {
+        color: #4ecdc4;
+        transform: scale(1.05);
+      }
+      .btn-profile-edit {
+        transition: all 0.3s ease;
+      }
+      .btn-profile-edit:hover {
+        color: #16213e !important;
+        background-color: #4ecdc4 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+      }
+      .btn-my-store {
+        transition: all 0.3s ease;
+      }
+      .btn-my-store:hover {
+        color: #16213e !important;
+        background-color: #4ecdc4 !important;
+        transform: translateY(-3px);
+      }
+      .btn-logout {
+        transition: all 0.3s ease;
+        border: 2px solid #ff6b6b;
+      }
+      .btn-logout:hover {
+        background-color: #ff6b6b;
+        color: #16213e !important;
+        transform: translateY(-3px);
+      }
+
+      .message-popup {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        padding: 20px 40px;
+        border-radius: 12px;
+        color: white;
+        text-align: center;
+        background-color: #4ecdc4;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        animation: slideIn 0.5s ease-out forwards,
+          fadeOut 0.5s ease-in 4s forwards;
+      }
+
+      .message-popup-error {
+        background-color: #ff6b6b;
+      }
+
+      .message-popup .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+          visibility: hidden;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <!-- Message Popup -->
+    <div
+      th:if="${message != null}"
+      th:classappend="${messageType == 'error' ? 'message-popup-error' : ''}"
+      class="message-popup"
+      id="popupMessage"
+    >
+      <div class="icon">
+        <i
+          class="fas"
+          th:classappend="${messageType == 'error' ? 'fa-times-circle' : 'fa-check-circle'}"
+        ></i>
+      </div>
+      <p th:text="${message}"></p>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#16213e] shadow-lg">
+      <div
+        class="container mx-auto px-4 py-3 flex items-center justify-between"
+      >
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-guitar text-3xl text-[#4ecdc4]"></i>
+          <span class="text-2xl font-bold custom-gradient">GuitarTune</span>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex items-center space-x-8">
+          <a
+            href="http://localhost:8080/home"
+            class="text-white nav-hover transition-all"
+            >Home</a
+          >
+          <a href="#" class="text-white nav-hover transition-all">Guitars</a>
+          <a href="#" class="text-white nav-hover transition-all"
+            >Accessories</a
+          >
+          <a href="#" class="text-white nav-hover transition-all">Brands</a>
+        </nav>
+
+        <!-- Profile -->
+        <div class="relative">
+          <a href="#" class="flex items-center space-x-2">
+            <i class="fas fa-user-circle text-3xl text-[#4ecdc4]"></i>
+            <span class="text-sm" th:text="${username}"></span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile Section -->
+    <section class="container mx-auto px-4 py-12">
+      <div class="max-w-2xl mx-auto bg-[#1a1a2e] rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+          <i class="fas fa-user-circle text-6xl text-[#4ecdc4] mb-4"></i>
+          <h2
+            class="text-3xl font-bold custom-gradient"
+            th:text="${user.username}"
+          ></h2>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-[#16213e] rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-400">Email</span>
+              <span class="font-semibold" th:text="${user.email}"></span>
+            </div>
+          </div>
+
+          <div class="bg-[#16213e] rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-400">Phone Number</span>
+              <span class="font-semibold" th:text="${user.phoneNumber}"></span>
+            </div>
+          </div>
+
+          <div class="bg-[#16213e] rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-400">City</span>
+              <span class="font-semibold" th:text="${user.city}"></span>
+            </div>
+          </div>
+
+          <div class="bg-[#16213e] rounded-lg p-4">
+            <div class="flex flex-col">
+              <span class="text-gray-400 mb-2">Address</span>
+              <textarea 
+                readonly 
+                class="w-full bg-[#1a1a2e] text-white p-2 rounded-lg resize-none min-h-[100px] focus:outline-none"
+                th:text="${user.address}"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="bg-[#16213e] rounded-lg p-6 shadow-lg">
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-gray-400 text-sm">Current Balance</span>
+                <p
+                  class="font-semibold text-2xl text-[#4ecdc4]"
+                  th:text="${'Rp. ' + #numbers.formatDecimal(user.saldo, 0, 'COMMA', 2, 'POINT')}"
+                ></p>
+              </div>
+              <button
+                id="purchaseSaldoBtn"
+                class="bg-[#4ecdc4] text-[#16213e] font-semibold px-4 py-2 rounded-lg hover:bg-[#3bb5a7] transition"
+              >
+                Purchase Saldo
+              </button>
+            </div>
+            <!-- Form untuk Top Up -->
+            <form
+              id="topupForm"
+              class="mt-4 hidden"
+              th:action="@{/user/topup}"
+              method="post"
+            >
+              <input
+                type="number"
+                name="saldo"
+                placeholder="Enter amount"
+                class="bg-[#1a1a2e] text-white px-4 py-2 rounded-lg w-full mb-4"
+              />
+              <button
+                type="submit"
+                class="bg-[#4ecdc4] text-[#16213e] font-semibold px-6 py-2 rounded-lg hover:bg-[#3bb5a7] transition"
+              >
+                Top Up
+              </button>
+            </form>
+          </div>
+
+          <div class="text-center mt-8 flex justify-center space-x-4">
+            <a
+              th:href="@{/user/update-profile/{id}(id=${user.id})}"
+              class="btn-profile-edit btn-my-store bg-[#16213e] text-[#4ecdc4] px-6 py-3 rounded-full hover:bg-opacity-90 transition-all flex items-center"
+            >
+              <i class="fas fa-user-edit mr-2"></i> Edit Profile
+            </a>
+            <a
+              th:href="@{/stores/check-store}"
+              class="btn-my-store bg-[#16213e] text-[#4ecdc4] px-6 py-3 rounded-full hover:bg-opacity-90 transition-all flex items-center"
+            >
+              <i class="fas fa-store mr-2"></i> My Store
+            </a>
+            <a
+              th:href="@{/logout}"
+              class="btn-logout bg-[#16213e] text-[#ff6b6b] px-6 py-3 rounded-full hover:bg-opacity-90 transition-all flex items-center"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#16213e] py-12">
+      <div class="container mx-auto px-4 grid grid-cols-4 gap-8">
+        <div>
+          <h4 class="text-xl font-bold mb-4 custom-gradient">Guitar Tune</h4>
+          <p class="text-gray-300">
+            Your ultimate destination for musical instruments.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-xl font-bold mb-4 custom-gradient">Quick Links</h4>
+          <ul class="space-y-2">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]">Home</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]">Shop</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]">Brands</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]"
+                >About Us</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xl font-bold mb-4 custom-gradient">
+            Customer Service
+          </h4>
+          <ul class="space-y-2">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]"
+                >Contact Us</a
+              >
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]"
+                >Shipping</a
+              >
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]">Returns</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-[#4ecdc4]">FAQs</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xl font-bold mb-4 custom-gradient">Stay Tuned</h4>
+          <p class="text-gray-300 mb-4">
+            Subscribe to our newsletter for the latest updates and offers!
+          </p>
+          <div class="flex">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="bg-[#1a1a2e] text-white px-4 py-2 rounded-l-full w-full focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+            />
+            <button
+              class="bg-[#4ecdc4] text-black px-4 py-2 rounded-r-full hover:bg-opacity-90"
+            >
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="container mx-auto px-4 mt-8 pt-8 border-t border-gray-700 text-center"
+      >
+        <p class="text-gray-500">
+          &copy; 2024 Guitar Tune. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const purchaseSaldoBtn = document.getElementById("purchaseSaldoBtn");
+      const topupForm = document.getElementById("topupForm");
+
+      purchaseSaldoBtn.addEventListener("click", function () {
+        topupForm.classList.toggle("hidden"); // Toggle class 'hidden' untuk menampilkan/menyembunyikan form
+      });
+    });
+  </script>
+</html>

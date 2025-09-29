@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Home Store Details - Guitar Tune</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        font-family: "Inter", sans-serif;
+        color: white;
+      }
+      .custom-gradient {
+        background: linear-gradient(to right, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .message-popup {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        padding: 20px 40px;
+        border-radius: 12px;
+        color: white;
+        text-align: center;
+        background-color: #4ecdc4;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        animation: slideIn 0.5s ease-out forwards,
+          fadeOut 0.5s ease-in 4s forwards;
+      }
+
+      .message-popup-error {
+        background-color: #ff6b6b;
+      }
+
+      .message-popup .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+          visibility: hidden;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen">
+    <!-- Message Popup -->
+    <div
+      th:if="${message != null}"
+      th:classappend="${messageType == 'error' ? 'message-popup-error' : ''}"
+      class="message-popup"
+      id="popupMessage"
+    >
+      <div class="icon">
+        <i
+          class="fas"
+          th:classappend="${messageType == 'error' ? 'fa-times-circle' : 'fa-check-circle'}"
+        ></i>
+      </div>
+      <p th:text="${message}"></p>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#16213e] shadow-lg">
+      <div
+        class="container mx-auto px-4 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <a
+            th:href="@{/home}"
+            class="mr-4 text-[#4ecdc4] hover:text-white transition-colors"
+          >
+            <i class="fas fa-arrow-left text-2xl"></i>
+          </a>
+          <i class="fas fa-store text-3xl text-[#4ecdc4]"></i>
+          <span class="text-2xl font-bold custom-gradient"
+            >Home Store Details</span
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12">
+      <!-- Store Details Card -->
+      <div class="bg-[#1a1a2e] rounded-lg shadow-lg p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-6 custom-gradient">
+          Store Information
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Text Details Column -->
+          <div class="md:col-span-2 space-y-4">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-gray-400">Store ID</p>
+                <p class="text-white font-semibold" th:text="${store.id}">
+                  N/A
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-400">Store Name</p>
+                <p
+                  class="text-white font-semibold"
+                  th:text="${store.storeName}"
+                >
+                  N/A
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-400">Total Income</p>
+                <p class="text-[#4ecdc4] font-bold" th:text="${store.income}">
+                  $0
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-400">Total Expense</p>
+                <p class="text-red-400 font-bold" th:text="${store.expence}">
+                  $0
+                </p>
+              </div>
+
+              <!-- Updated Button Placement -->
+              <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-gray-400">Registration Date</p>
+                  <p class="text-white" th:text="${store.registerDate}">N/A</p>
+                </div>
+                <div class="flex items-end">
+                  <button
+                    id="showWithdrawModal"
+                    class="bg-gradient-to-r from-[#ff6b6b] to-[#4ecdc4] text-white px-4 py-2 rounded-lg font-bold hover:opacity-90 transition-all flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
+                  >
+                    <i class="fas fa-money-bill-wave mr-2"></i>Withdraw Income
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Image Column -->
+          <div class="flex items-center justify-center">
+            <div
+              th:if="${store.storeImage != null}"
+              class="w-full max-w-[300px]"
+            >
+              <img
+                th:src="'data:image/png;base64,' + ${store.base64StoreImage}"
+                alt="Store Image"
+                class="w-full h-64 object-cover rounded-lg shadow-lg"
+              />
+            </div>
+            <div
+              th:if="${store.storeImage == null}"
+              class="w-full max-w-[300px] h-64 bg-[#16213e] rounded-lg flex items-center justify-center text-gray-400"
+            >
+              No Store Image
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons Section -->
+      <div class="flex justify-end space-x-4 mb-6">
+        <button
+          id="showAddProductModal"
+          class="bg-[#4ecdc4] text-black px-4 py-2 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+        >
+          <i class="fas fa-plus mr-2"></i>Add Product
+        </button>
+        <button
+          id="showProductList"
+          class="bg-[#ff6b6b] text-white px-4 py-2 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+        >
+          <i class="fas fa-list mr-2"></i>View Products
+        </button>
+      </div>
+
+      <!-- Product List Section -->
+      <div
+        id="productListSection"
+        class="hidden bg-[#1a1a2e] rounded-lg shadow-lg p-6"
+      >
+        <h2 class="text-2xl font-bold mb-6 custom-gradient">Product List</h2>
+        <div
+          th:if="${not #lists.isEmpty(products)}"
+          class="grid md:grid-cols-3 gap-4"
+        >
+          <div
+            th:each="product : ${products}"
+            class="bg-[#16213e] rounded-lg p-4"
+          >
+            <img
+              th:if="${product.product.imageProduct}"
+              th:src="'data:image/png;base64,' + ${product.base64Image}"
+              alt="Product Image"
+              class="w-full h-48 object-cover rounded-lg mb-4"
+            />
+            <h3
+              class="text-lg font-bold mb-2"
+              th:text="${product.product.productName}"
+            >
+              Product Name
+            </h3>
+            <p
+              class="text-gray-400 mb-2"
+              th:text="${product.product.description}"
+            >
+              Description
+            </p>
+            <p
+              class="text-gray-400 mb-2"
+              th:text="${product.product.category.categoryName}"
+            >
+              Category
+            </p>
+            <div class="flex justify-between items-center">
+              <span
+                class="text-[#4ecdc4] font-bold"
+                th:text="${'$' + product.product.price}"
+                >$0</span
+              >
+              <span
+                class="text-gray-400"
+                th:text="${'Qty: ' + product.product.quantity}"
+                >Qty: 0</span
+              >
+            </div>
+            <div class="mt-4 flex space-x-2">
+              <button class="bg-blue-500 text-white px-3 py-1 rounded-lg">
+                <a
+                  th:href="@{/product/edit-product/{id}(id=${product.product.id})}"
+                  >Edit</a
+                >
+              </button>
+              <button class="bg-red-500 text-white px-3 py-1 rounded-lg">
+                <a
+                  th:href="@{/product/delete-product/{id}(id=${product.product.id})}"
+                  >Delete</a
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+        <p
+          th:if="${#lists.isEmpty(products)}"
+          class="text-center text-gray-400"
+        >
+          No products found.
+        </p>
+      </div>
+
+      <!-- Withdraw Income Modal -->
+      <div
+        id="withdrawModal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+      >
+        <div class="bg-[#1a1a2e] rounded-lg shadow-lg p-6 w-full max-w-md">
+          <h2 class="text-2xl font-bold mb-6 custom-gradient">
+            Withdraw Income
+          </h2>
+          <form th:action="@{/stores/withdraw}" method="post" class="space-y-4">
+            <div>
+              <label class="block text-gray-400 mb-2">Amount to Withdraw</label>
+              <input
+                type="number"
+                name="jum"
+                required
+                step="0.01"
+                class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+              />
+            </div>
+
+            <div class="flex space-x-4">
+              <button
+                type="submit"
+                class="flex-1 bg-[#4ecdc4] text-black py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+              >
+                Withdraw
+              </button>
+              <button
+                type="button"
+                id="closeWithdrawModal"
+                class="flex-1 bg-red-500 text-white py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Add Product Modal -->
+      <div
+        id="addProductModal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+      >
+        <div class="bg-[#1a1a2e] rounded-lg shadow-lg p-6 w-full max-w-md">
+          <h2 class="text-2xl font-bold mb-6 custom-gradient">
+            Add New Product
+          </h2>
+          <form
+            th:action="@{/product/save-product}"
+            method="post"
+            enctype="multipart/form-data"
+            class="space-y-4"
+          >
+            <input type="hidden" th:value="${store.id}" name="storeId" />
+
+            <div>
+              <label class="block text-gray-400 mb-2">Product Name</label>
+              <input
+                type="text"
+                name="productName"
+                required
+                class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-400 mb-2">Category</label>
+              <select
+                name="category"
+                required
+                class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+              >
+                <option value="" disabled selected>
+                  Select a Guitar Category
+                </option>
+                <option value="Acoustic">Acoustic Guitar</option>
+                <option value="Electric">Electric Guitar</option>
+                <option value="Bass">Bass Guitar</option>
+              </select>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-gray-400 mb-2">Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  required
+                  step="0.01"
+                  class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+                />
+              </div>
+              <div>
+                <label class="block text-gray-400 mb-2">Quantity</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  required
+                  class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 mb-2">Description</label>
+              <textarea
+                name="description"
+                rows="3"
+                required
+                class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 mb-2">Product Image</label>
+              <input
+                type="file"
+                name="file"
+                required
+                accept="image/*"
+                class="w-full bg-[#16213e] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]"
+              />
+            </div>
+
+            <div class="flex space-x-4">
+              <button
+                type="submit"
+                class="flex-1 bg-[#4ecdc4] text-black py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+              >
+                Save Product
+              </button>
+              <button
+                type="button"
+                id="closeAddProductModal"
+                class="flex-1 bg-red-500 text-white py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#16213e] py-12 mt-12">
+      <div class="container mx-auto px-4 text-center">
+        <p class="text-gray-500">
+          &copy; 2024 Guitar Tune. Store Management System.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Modal and Product List Toggle Functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        const addProductModal = document.getElementById("addProductModal");
+        const showAddProductModalBtn = document.getElementById(
+          "showAddProductModal"
+        );
+        const closeAddProductModalBtn = document.getElementById(
+          "closeAddProductModal"
+        );
+        const productListSection =
+          document.getElementById("productListSection");
+        const showProductListBtn = document.getElementById("showProductList");
+        const withdrawModal = document.getElementById("withdrawModal");
+        const showWithdrawModalBtn =
+          document.getElementById("showWithdrawModal");
+        const closeWithdrawModalBtn =
+          document.getElementById("closeWithdrawModal");
+
+        // Show Add Product Modal
+        showAddProductModalBtn.addEventListener("click", () => {
+          addProductModal.classList.remove("hidden");
+        });
+
+        // Close Add Product Modal
+        closeAddProductModalBtn.addEventListener("click", () => {
+          addProductModal.classList.add("hidden");
+        });
+
+        // Toggle Product List
+        showProductListBtn.addEventListener("click", () => {
+          productListSection.classList.toggle("hidden");
+        });
+
+        // Close modal if clicked outside
+        addProductModal.addEventListener("click", (e) => {
+          if (e.target === addProductModal) {
+            addProductModal.classList.add("hidden");
+          }
+        });
+
+        // Show Withdraw Modal
+        showWithdrawModalBtn.addEventListener("click", () => {
+          withdrawModal.classList.remove("hidden");
+        });
+
+        // Close Withdraw Modal
+        closeWithdrawModalBtn.addEventListener("click", () => {
+          withdrawModal.classList.add("hidden");
+        });
+
+        // Close modal if clicked outside
+        withdrawModal.addEventListener("click", (e) => {
+          if (e.target === withdrawModal) {
+            withdrawModal.classList.add("hidden");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

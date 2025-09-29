@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Guitar Tune - Create Your Musical Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-gradient {
+            background: linear-gradient(to right, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .form-container {
+            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        .input-glow:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+        }
+        .social-login-btn {
+            transition: all 0.3s ease;
+            transform: perspective(500px) rotateX(0deg);
+        }
+        .social-login-btn:hover {
+            transform: perspective(500px) rotateX(-5deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="absolute top-6 left-6 flex items-center space-x-3">
+        <i class="fas fa-guitar text-4xl text-[#4ecdc4]"></i>
+        <span class="text-3xl font-bold custom-gradient">GuitarTune</span>
+    </div>
+
+    <div class="form-container w-full max-w-md p-8 rounded-xl">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold mb-4 custom-gradient">Create Account</h1>
+            <p class="text-gray-300">Start your musical journey with Guitar Tune</p>
+        </div>
+
+        <div th:if="${message != null}" class="bg-red-600/20 text-red-400 p-4 rounded-lg mb-6 text-center">
+            <p th:text="${message}"></p>
+        </div>
+
+        <form th:action="@{/user/save-user}" method="post" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-user mr-2 text-[#4ecdc4]"></i>Username
+                </label>
+                <input type="text" name="username" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-envelope mr-2 text-[#4ecdc4]"></i>Email Address
+                </label>
+                <input type="email" name="email" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-phone mr-2 text-[#4ecdc4]"></i>Phone Number
+                </label>
+                <input type="tel" name="phoneNumber" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-map-marker-alt mr-2 text-[#4ecdc4]"></i>City
+                </label>
+                <select name="city" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none">
+                    <option value="">Select City</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Jakarta">Jakarta</option>
+                    <option value="Surabaya">Surabaya</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-home mr-2 text-[#4ecdc4]"></i>Address
+                </label>
+                <textarea name="address" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none min-h-[100px]" 
+                    placeholder="Enter your full address"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    <i class="fas fa-lock mr-2 text-[#4ecdc4]"></i>Password
+                </label>
+                <input type="password" name="password" required 
+                    class="input-glow w-full p-3 bg-[#16213e] text-white rounded-lg border border-gray-700 focus:outline-none">
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-[#ff6b6b] to-[#4ecdc4] text-white font-bold rounded-lg hover:opacity-90 transition-all">
+                    Create Account
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-6 text-gray-400">
+            Already have an account? 
+            <a th:href="@{/login}" class="text-[#4ecdc4] hover:underline">Login</a>
+        </p>
+    </div>
+</body>
+</html>

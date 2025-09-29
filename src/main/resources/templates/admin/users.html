@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .message-popup {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        padding: 20px 40px;
+        border-radius: 12px;
+        color: white;
+        text-align: center;
+        background-color: #4ecdc4;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        animation: slideIn 0.5s ease-out forwards,
+          fadeOut 0.5s ease-in 4s forwards;
+      }
+
+      .message-popup-error {
+        background-color: #ff6b6b;
+      }
+
+      .message-popup .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+          visibility: hidden;
+        }
+      }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+        <!-- Message Popup -->
+        <div
+        th:if="${message != null}"
+        th:classappend="${messageType == 'error' ? 'message-popup-error' : ''}"
+        class="message-popup"
+        id="popupMessage"
+        >
+        <div class="icon">
+            <i
+            class="fas"
+            th:classappend="${messageType == 'error' ? 'fa-times-circle' : 'fa-check-circle'}"
+            ></i>
+        </div>
+        <p th:text="${message}"></p>
+        </div>
+        <div class="flex min-h-screen">
+
+        <!-- Sidebar Admin -->
+        <div class="w-64 bg-gradient-to-b from-indigo-900 to-indigo-800 p-6 text-white shadow-2xl">
+            <div class="flex items-center mb-10 border-b border-gray-700 pb-4">
+                <i class="fas fa-store-alt text-3xl mr-4 text-indigo-300"></i>
+                <h2 class="text-2xl font-extrabold text-white">Guitar Store Admin</h2>
+            </div>
+            <nav>
+                <ul class="space-y-3">
+                    <li>
+                        <a th:href="@{/admin/dashboard}" class="flex items-center py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out group">
+                            <i class="fas fa-box mr-4 text-indigo-300 group-hover:text-white"></i>
+                            <span class="font-semibold group-hover:text-white">Product</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center py-3 px-4 rounded-lg bg-indigo-700 transition duration-300 ease-in-out group">
+                            <i class="fas fa-users mr-4 text-white"></i>
+                            <span class="font-semibold text-white">User</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+                <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-lg p-4 flex items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-user text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white" th:text="${'Admin ' + admin.username}">Admin Utama</p>
+                            <p class="text-xs text-white/70">Administrator</p>
+                        </div>
+                    </div>
+                    <div class="ml-auto">
+                        <a th:href="@{/login}" class="text-white hover:text-red-200 transition duration-300 flex items-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-md p-6 flex justify-between items-center sticky top-0 z-10">
+                <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                <form method="get" th:action="@{/admin/users}" class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" name="search" placeholder="Cari..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64">
+                        <button >
+                            <i class="fas fa-search text-xl absolute left-3 top-3 text-gray-400"></i>
+                        </button>
+                    </div>
+                </form>
+            </header>
+
+            <!-- Search and Filter Section -->
+            <div class="p-6 bg-white m-6 rounded-lg shadow-md">
+                <form method="get" th:action="@{/admin/users}" id="filterForm" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <select name="sort" class="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Sort by</option>
+                        <option value="asc">Username (A-Z)</option>
+                        <option value="desc">Username (Z-A)</option>
+                    </select>
+                </form>
+            </div>
+
+            <!-- Users Table -->
+            <div class="p-6 bg-white rounded-lg shadow-md">
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
+                                <th class="px-4 py-3 text-leaf text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Iterasi Daftar User -->
+                            <tr 
+                                th:each="user, iterStat : ${users}" 
+                                class="hover:bg-gray-50 transition duration-200"
+                            >
+                                <td class="px-4 py-4 whitespace-nowrap" th:text="${iterStat.index + 1}">1</td>
+                                <td class="px-4 py-4 whitespace-nowrap font-medium text-gray-900" th:text="${user.username}">Username</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-gray-500" th:text="${user.email}">email@example.com</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-gray-500" th:text="${user.phoneNumber}">+62 123 4567</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-gray-500" th:text="${user.city}">City</td>
+                                <td 
+                                    class="px-4 py-4 whitespace-nowrap text-right text-gray-900" 
+                                    th:text="${'Rp ' + #numbers.formatDecimal(user.saldo, 0, 'COMMA', 0, 'POINT')}"
+                                >
+                                    Rp 0
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <div class="flex justify-center space-x-2">
+                                        <a 
+                                            th:href="@{/admin/delete-user/{id}(id=${user.id})}" 
+                                            class="text-red-600 hover:text-red-900 transition duration-300"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Pesan jika tidak ada User -->
+                            <tr th:if="${#lists.isEmpty(users)}">
+                                <td colspan="7" class="text-center py-4 text-gray-500">
+                                    No users found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple dropdown toggle for profile menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            const filterForm = document.getElementById("filterForm");
+            const selectElements = filterForm.querySelectorAll("select");
+
+            // Add event listener to each select element
+            selectElements.forEach((select) => {
+                select.addEventListener("change", function () {
+                filterForm.submit();
+                });
+            });
+
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('[tabindex]');
+                const content = dropdown.querySelector('.dropdown-content');
+                
+                toggle.addEventListener('click', () => {
+                    content.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!dropdown.contains(event.target)) {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
