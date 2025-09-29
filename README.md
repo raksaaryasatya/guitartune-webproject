@@ -15,24 +15,6 @@ Aplikasi ini mendukung dua role utama: **Admin** dan **User**, serta menyediakan
 - **Maven** (Build tools)
 
 ---
-
-## 🔑 Role & Konstanta
-Aplikasi ini menggunakan konstanta role untuk membedakan akses:
-`java
-public class RoleConstant {
-    public static final String ROLE_ADMIN = "ADMIN";
-    public static final String ROLE_USER = "USER";
-}
-src/main/java/com/guitartune/project_raksa/
- ├── configurations/   # Spring Security, Auth config
- ├── constant/         # Konstanta role & konfigurasi global
- ├── controllers/      # MVC Controller (User, Store, Product, Transaction, Admin)
- ├── dto/              # Data Transfer Object untuk request/response
- ├── init/             # Inisialisasi data awal (misalnya default admin/user)
- ├── models/           # Entity utama (User, Store, Product, Transaction, Category, Role)
- ├── repositorys/      # Spring Data JPA Repository
- └── services/         # Business logic (UserService, StoreService, ProductService, dll.)`
-
  ## ✨ Fitur Utama
 
 ### 👤 User
@@ -101,3 +83,22 @@ mvn spring-boot:run
 - Konstanta role didefinisikan di **RoleConstant** untuk menjaga konsistensi penggunaan role.  
 
 ---
+
+## 🔑 Role & Konstanta
+Aplikasi ini menggunakan konstanta role untuk membedakan akses:
+```java
+public class RoleConstant {
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_USER = "USER";
+}
+src/main/java/com/guitartune/project_raksa/
+ ├── configurations/   # Spring Security, Auth config
+ ├── constant/         # Konstanta role & konfigurasi global
+ ├── controllers/      # MVC Controller (User, Store, Product, Transaction, Admin)
+ ├── dto/              # Data Transfer Object untuk request/response
+ ├── init/             # Inisialisasi data awal (misalnya default admin/user)
+ ├── models/           # Entity utama (User, Store, Product, Transaction, Category, Role)
+ ├── repositorys/      # Spring Data JPA Repository
+ └── services/         # Business logic (UserService, StoreService, ProductService, dll.)
+
+
